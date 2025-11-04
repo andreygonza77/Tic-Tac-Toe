@@ -51,9 +51,28 @@ public class Main {
                 msg = in1.readLine();
                 try{
                     mossa = Integer.parseInt(msg);
-                    statoPartita = OK;
+                    
                     // check se ha vinto o no; da fare
+                    if(board[mossa] == 1 || board[mossa] == 2 || mossa < 0 || mossa > 8){
+                        statoPartita = KO;
+                        out1.println(statoPartita);
+                        break;
+                    }
+
+                    statoPartita = OK;
                     board[mossa] = 1;
+                    if(statoPartita == OK){
+                        if(checkWin(board, turno)){
+                            statoPartita = W;
+                            out1.println(statoPartita);
+                            statoPartita = DISCONNECTED;
+                        }
+                        else if(checkDraw(board, turno)){
+                            statoPartita = P;
+                            out1.println(statoPartita);
+                            statoPartita = DISCONNECTED;
+                        }
+                    }
                     out1.println(statoPartita);
                     String campo = boardContent(board);
                     out1.println(campo);
@@ -68,37 +87,76 @@ public class Main {
 
             }
             if(turno == 2){
-                out2.println("Tocca a te: ");
-                msg = in2.readLine();
-                try{
-                    mossa = Integer.parseInt(msg);
-                    statoPartita = OK;
+                mossa = Integer.parseInt(msg);
+                    
                     // check se ha vinto o no; da fare
+                    if(board[mossa] == 1 || board[mossa] == 2 || mossa < 0 || mossa > 8){
+                        statoPartita = KO;
+                        out2.println(statoPartita);
+                        break;
+                    }
+
+                    statoPartita = OK;
                     board[mossa] = 2;
+                    if(statoPartita == OK){
+                        if(checkWin(board, turno)){
+                            statoPartita = W;
+                            out2.println(statoPartita);
+                            statoPartita = DISCONNECTED;
+                        }
+                        else if(checkDraw(board, turno)){
+                            statoPartita = P;
+                            out2.println(statoPartita);
+                            statoPartita = DISCONNECTED;
+                        }
+                    }
                     out2.println(statoPartita);
                     String campo = boardContent(board);
                     out2.println(campo);
-                    turno = 1; // sposta il turno al giocatroe 1
-                }
-                catch(Exception e){
-                    statoPartita = KO;
-                    out2.println(KO);
-                }
+                    turno = 1; // sposta il turno al giocatroe 2
             }
-        } while (true);
-        
+        } while (statoPartita == DISCONNECTED);
     }
 
     public static boolean checkWin(int board[], int turno){
-
-        return false;
+        boolean b = false;
+        if(board[0] == turno && board[1] == turno && board[2] == turno){
+            b = true;
+        } else if(board[3] == turno && board[4] == turno && board[5] == turno){
+            b = true;
+        }
+        else if(board[6] == turno && board[7] == turno && board[8] == turno){
+            b = true;
+        }
+        else if(board[0] == turno && board[3] == turno && board[6] == turno){
+            b = true;
+        }
+        else if(board[1] == turno && board[4] == turno && board[7] == turno){
+            b = true;
+        }
+        else if(board[2] == turno && board[5] == turno && board[8] == turno){
+            b = true;
+        }
+        else if(board[0] == turno && board[4] == turno && board[8] == turno){
+            b = true;
+        } else if(board[2] == turno && board[4] == turno && board[6] == turno){
+            b = true;
+        }
+        return b;
     }
 
+    public static boolean checkDraw(int board[], int turno){
+        for(int i = 0; i<9; i++){
+            if(board[i] == 0){
+                return false;
+            }
+        }
+        return true;
+    }
     public static String boardContent(int board[]){
         String s = "";
         for(int i = 0; i < board.length; i++){
-            s+=board[i];
-            s.split(",");
+            s+=board[i] + ",";
         }
         return s;
     }
