@@ -46,8 +46,11 @@ public class Main {
 
         do { 
             if(turno == 1){
-                out1.println("Tocca a te: ");
                 msg = in1.readLine();
+                if(msg == null){
+                    statoPartita = DISCONNECTED;
+                    break;
+                }
                 try{
                     mossa = Integer.parseInt(msg);
                     
@@ -60,7 +63,7 @@ public class Main {
                     statoPartita = OK;
                     board[mossa] = 1;
                     String campo = boardContent(board);
-                    if(statoPartita == OK){
+                    if(statoPartita.equals(OK)){
                         if(checkWin(board, turno)){
                             statoPartita = W;
                             out1.println(statoPartita);
@@ -87,8 +90,11 @@ public class Main {
                 }
             }
             if(turno == 2){
-                out2.println("Tocca a te: ");
                 msg = in2.readLine();
+                if(msg == null){
+                    statoPartita = DISCONNECTED;
+                    break;
+                }
                 try{
                     mossa = Integer.parseInt(msg);
                     
@@ -100,7 +106,7 @@ public class Main {
                     statoPartita = OK;
                     board[mossa] = 2;
                     String campo = boardContent(board);
-                    if(statoPartita == OK){
+                    if(statoPartita.equals(OK)){
                         if(checkWin(board, turno)){
                             statoPartita = W;
                             out2.println(statoPartita);
@@ -127,6 +133,14 @@ public class Main {
                 }
             }
         } while (true);
+
+        if (statoPartita.equals(DISCONNECTED)) {
+            if (turno == 1) {
+                out2.println("Disconnessione di un giocatore");
+            } else {
+                out1.println("Disconnessione di un giocatore");
+            }
+        }
     }
 
     public static boolean checkWin(int board[], int turno){
